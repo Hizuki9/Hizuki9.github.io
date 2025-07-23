@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[您的姓名] | 個人作品與網站</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- 通用樣式變數 --- */
+        :root {
+            --primary-color: #007BFF;   /* 主題藍色 */
+            --accent-color: #28a745;    /* 強調綠色 */
+            --text-color: #333;         /* 主要文字顏色 */
+            --bg-color: #f8f9fa;        /* 頁面背景色 */
+            --card-bg: #ffffff;         /* 卡片背景色 */
+            --border-color: #e9ecef;    /* 邊框顏色 */
+            --transition-speed: 0.3s;   /* 通用過渡動畫速度 */
+        }
+
+        /* --- 基礎樣式重置與設定 --- */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* 使用 border-box 盒模型 */
+            line-height: 1.6;       /* 行高設定 */
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden;     /* 防止水平捲動條，避免動畫超出視窗 */
+        }
+
+        /* 內容容器，限制最大寬度並置中 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 每個區塊的通用樣式 */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-color); /* 區塊間的分割線 */
+            position: relative; /* 為動畫效果準備 */
+            overflow: hidden;   /* 確保內容不會溢出導致動畫問題 */
+        }
+
+        section:last-of-type {
+            border-bottom: none; /* 最後一個區塊沒有底部邊框 */
+        }
+
+        /* 標題樣式 */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 2.5em; /* 主要區塊標題 */
+        }
+
+        h3 {
+            font-size: 1.8em; /* 次要標題或卡片標題 */
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 1em; /* 段落底部間距 */
+        }
+
+        /* 連結通用樣式 */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease; /* 顏色過渡效果 */
+        }
+
+        a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        /* --- 導航列 (Navigation Bar) --- */
+        nav {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 導航列陰影 */
+            position: sticky; /* 粘性定位，捲動時固定在頂部 */
+            top: 0;
+            z-index: 1000; /* 確保導航列在最上層 */
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between; /* 左右分散對齊 */
+            align-items: center; /* 垂直居中 */
+            padding: 15px 20px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            transition: transform var(--transition-speed) ease; /* Logo 放大過渡 */
+        }
+        nav .logo:hover {
+            transform: scale(1.05); /* Logo 懸停時輕微放大 */
+        }
+
+        nav ul {
+            list-style: none; /* 移除列表符號 */
+            margin: 0;
+            padding: 0;
+            display: flex; /* 水平排列菜單項 */
+        }
+
+        nav ul li {
+            margin-left: 30px; /* 菜單項間距 */
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        /* 導航連結底部劃線效果 */
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0; /* 初始寬度為0 */
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width var(--transition-speed) ease; /* 寬度過渡效果 */
+        }
+
+        nav ul li a:hover::after {
+            width: 100%; /* 懸停時寬度變為100% */
+        }
+
+        /* --- 英雄區塊 (Hero Section) --- */
+        .hero {
+            /* 背景圖片和漸變疊加 */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/hero-bg.jpg') no-repeat center center/cover;
+            background-attachment: fixed; /* **視差效果的關鍵**：讓背景圖片固定，前景捲動 */
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            color: white;
+            animation: fadeInDown 1s ease-out forwards; /* 頁面載入時的初始動畫 */
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out forwards; /* 頁面載入時的初始動畫 */
+            animation-delay: 0.3s; /* 延遲 0.3 秒出現 */
+            opacity: 0; /* 初始隱藏 */
+            animation-fill-mode: forwards; /* 保持動畫結束時的狀態 */
+        }
+
+        .hero .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color var(--transition-speed) ease, transform 0.2s ease, box-shadow var(--transition-speed) ease; /* 新增 box-shadow 過渡 */
+            animation: zoomIn 1s ease-out forwards; /* 頁面載入時的初始動畫 */
+            animation-delay: 0.6s; /* 延遲 0.6 秒出現 */
+            opacity: 0; /* 初始隱藏 */
+            animation-fill-mode: forwards; /* 保持動畫結束時的狀態 */
+        }
+
+        .hero .btn:hover {
+            background-color: #218838; /* 懸停時顏色變深 */
+            transform: translateY(-2px) scale(1.02); /* 輕微上浮並放大 */
+            box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3); /* 懸停時陰影效果 */
+            text-decoration: none;
+        }
+
+        /* --- 關於我 (About Me) --- */
+        .about-me .content {
+            display: flex;
+            flex-wrap: wrap; /* 允許內容換行 */
+            gap: 40px; /* 項目間距 */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-me .profile-img {
+            flex: 0 0 250px; /* 固定寬度 250px */
+            height: 250px;
+            border-radius: 50%; /* 圓形頭像 */
+            overflow: hidden;
+            border: 5px solid var(--primary-color);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .about-me .profile-img:hover {
+            transform: scale(1.05); /* 懸停時圖片輕微放大 */
+            box-shadow: 0 0 25px rgba(0,0,0,0.2); /* 懸停時陰影變深 */
+        }
+
+        .about-me .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保圖片填充容器 */
+        }
+
+        .about-me .text-content {
+            flex: 1; /* 佔據剩餘空間 */
+            max-width: 700px;
+        }
+
+        /* --- 作品集 (Portfolio) --- */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 自動調整列數，每列最小300px */
+            gap: 30px; /* 網格間距 */
+        }
+
+        .portfolio-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            text-align: center;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px); /* 懸停時卡片上浮 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* 懸停時陰影變深 */
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease; /* 圖片放大過渡 */
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.05); /* 懸停時圖片放大 */
+        }
+
+        .portfolio-item .details {
+            padding: 20px;
+        }
+
+        .portfolio-item h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: var(--text-color);
+        }
+
+        .portfolio-item p {
+            font-size: 0.95em;
+            color: #666;
+            min-height: 4em; /* 確保描述高度一致，避免排版跳動 */
+        }
+
+        .portfolio-item .project-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 3px;
+        }
+        /* 作品連結底部劃線效果 */
+        .portfolio-item .project-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width var(--transition-speed) ease;
+        }
+        .portfolio-item .project-link:hover::after {
+            width: 100%;
+        }
+
+
+        /* --- 服務項目 / 技能專長 (Skills) --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            text-align: center;
+        }
+
+        .skill-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px); /* 懸停時卡片上浮 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .skill-card h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .skill-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .skill-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--border-color);
+            display: flex; /* 讓圖標和文字對齊 */
+            align-items: center;
+        }
+
+        .skill-card ul li i {
+            margin-right: 10px; /* 圖標與文字間距 */
+            color: var(--primary-color);
+            font-size: 1.1em;
+        }
+
+        .skill-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        /* --- 聯絡我 (Contact) --- */
+        .contact-info {
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+        .contact-info a {
+            font-weight: 600;
+        }
+
+        .social-links {
+            margin-top: 30px;
+            font-size: 2em; /* 社群圖標大小 */
+        }
+
+        .social-links a {
+            margin: 0 15px;
+            color: var(--text-color);
+            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease; /* 顏色和縮放過渡 */
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: scale(1.2); /* 懸停時社群圖標放大 */
+        }
+
+        /* --- 頁腳 (Footer) --- */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        /* --- 捲動時淡入動畫樣式 (Scroll-Reveal Animation) --- */
+        /* 初始狀態：隱藏且稍微下移 */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* 動畫持續時間和類型 */
+            will-change: opacity, transform; /* 最佳化性能，告知瀏覽器這些屬性會變化 */
+        }
+
+        /* 觸發狀態：完全顯示並回到原始位置 */
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Hero 區塊的初始載入動畫 (頁面載入時觸發) --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- 響應式設計 (Responsive Design) --- */
+        @media (max-width: 768px) {
+            nav .container {
+                flex-direction: column; /* 小螢幕下導航列垂直排列 */
+            }
+
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap; /* 導航項目允許換行 */
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 15px 10px; /* 小螢幕下導航項目間距調整 */
+            }
+
+            .hero h1 {
+                font-size: 2.5em; /* 小螢幕下標題字體縮小 */
+            }
+
+            .hero p {
+                font-size: 1.2em;
+            }
+
+            .about-me .content {
+                flex-direction: column; /* 小螢幕下「關於我」內容垂直排列 */
+            }
+
+            .about-me .profile-img {
+                margin-bottom: 30px; /* 頭像下方間距 */
+            }
+
+            /* 小螢幕下網格佈局變成單列 */
+            .portfolio-grid, .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <div class="logo">[您的姓名]</div>
+            <ul>
+                <li><a href="#about">關於我</a></li>
+                <li><a href="#portfolio">作品集</a></li>
+                <li><a href="#skills">技能專長</a></li>
+                <li><a href="#contact">聯絡我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="container">
+            <h1>[您的姓名] 的數位創作世界</h1>
+            <p>一位致力於創造卓越數位體驗的 [您的主要專業領域] 專家。</p>
+            <a href="#portfolio" class="btn">查看我的作品集</a>
+        </div>
+    </section>
+
+    <section class="about-me fade-in-section" id="about">
+        <div class="container">
+            <h2>關於我</h2>
+            <div class="content">
+                <div class="profile-img">
+                    <img src="111.png" alt="您的頭像"> </div>
+                <div class="text-content">
+                    <p>我是江，一位擁有 **[您的經驗年數]** 年經驗的 **[您的主要專業領域]**。我熱衷於 **[您最喜歡做的事情或您的核心價值，例如：將複雜的問題轉化為簡潔的解決方案]**。</p>
+                    <p>我的專業範圍涵蓋 **[列出您的主要技能或服務，例如：前端開發、UI/UX 設計、品牌策略、數據分析等]**。我曾參與 **[提及一個關鍵專案或成就，例如：提升網站轉換率20%、成功推出新產品]**，並在過程中展現了 **[您的軟技能，例如：出色的問題解決能力、跨部門溝通]**。</p>
+                    <p>我堅信 **[您的信念或目標，例如：設計應該以人為本、程式碼應該清晰高效]**。期待能有機會與您合作，一同創造更多有影響力的數位產品與體驗。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="portfolio fade-in-section" id="portfolio">
+        <div class="container">
+            <h2>我的作品集</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item fade-in-section">
+                    <img src="images/project1.jpg" alt="專案一圖片"> <div class="details">
+                        <h3>專案名稱一：響應式電商網站</h3>
+                        <p>在這個專案中，我負責了整個前端介面開發，從 UI/UX 設計稿到最終的響應式實現。使用 React 和 styled-components 構建，提升了使用者購物體驗。</p>
+                        <a href="https://your-project1-link.com" target="_blank" class="project-link">查看專案 <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item fade-in-section">
+                    <img src="images/project2.jpg" alt="專案二圖片"> <div class="details">
+                        <h3>專案名稱二：品牌形象設計與網站建置</h3>
+                        <p>為一家新創公司設計了完整的品牌識別系統，包括 Logo、色彩、字體，並基於 WordPress 平台建置了官方網站，確保品牌一致性。</p>
+                        <a href="https://your-project2-link.com" target="_blank" class="project-link">查看專案 <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <div class="portfolio-item fade-in-section">
+                    <img src="images/project3.jpg" alt="專案三圖片"> <div class="details">
+                        <h3>專案名稱三：數據視覺化儀表板</h3>
+                        <p>開發了一個互動式的數據儀表板，用於展示銷售數據分析。利用 D3.js 和 Vue.js 實現動態圖表和篩選功能，幫助用戶快速洞察數據。</p>
+                        <a href="https://your-project3-link.com" target="_blank" class="project-link">查看專案 <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                </div>
+        </div>
+    </section>
+
+    <section class="skills fade-in-section" id="skills">
+        <div class="container">
+            <h2>我的技能與服務</h2>
+            <div class="skills-grid">
+                <div class="skill-card fade-in-section">
+                    <h3>前端開發</h3>
+                    <ul>
+                        <li><i class="fas fa-code"></i> HTML5 & CSS3 (Sass, Less)</li>
+                        <li><i class="fab fa-js"></i> JavaScript (ES6+)</li>
+                        <li><i class="fab fa-react"></i> React.js, Vue.js</li>
+                        <li><i class="fas fa-mobile-alt"></i> 響應式網頁設計</li>
+                        <li><i class="fas fa-palette"></i> UI 框架 (Bootstrap, Tailwind CSS)</li>
+                    </ul>
+                </div>
+
+                <div class="skill-card fade-in-section">
+                    <h3>設計與工具</h3>
+                    <ul>
+                        <li><i class="fas fa-drafting-compass"></i> UI/UX 設計</li>
+                        <li><i class="fab fa-figma"></i> Figma, Sketch, Adobe XD</li>
+                        <li><i class="fab fa-photoshop"></i> Adobe Photoshop, Illustrator</li>
+                        <li><i class="fas fa-lightbulb"></i> 線框圖與原型製作</li>
+                        <li><i class="fas fa-pen-nib"></i> 品牌識別設計</li>
+                    </ul>
+                </div>
+
+                <div class="skill-card fade-in-section">
+                    <h3>其他技能</h3>
+                    <ul>
+                        <li><i class="fab fa-github"></i> Git 版本控制</li>
+                        <li><i class="fas fa-server"></i> RESTful API 整合</li>
+                        <li><i class="fas fa-database"></i> 基礎後端概念 (Node.js)</li>
+                        <li><i class="fas fa-chart-line"></i> 數據視覺化</li>
+                        <li><i class="fas fa-lightbulb"></i> 專案管理與溝通</li>
+                    </ul>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section class="contact fade-in-section" id="contact">
+        <div class="container">
+            <h2>聯絡我</h2>
+            <div class="contact-info">
+                <p>對我的作品感興趣？或是有專案合作的機會？歡迎隨時與我聯繫！</p>
+                <p><i class="fas fa-envelope"></i> 電子郵件：<a href="mailto:your.email@example.com">your.email@example.com</a></p>
+                <p><i class="fas fa-phone-alt"></i> 電話：[您的電話號碼，可選]</p>
+            </div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/yourprofile/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/yourusername" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.behance.net/yourusername" target="_blank" title="Behance"><i class="fab fa-behance-square"></i></a>
+                </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 [您的姓名]. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 平滑捲動功能 ---
+        // 選擇所有導航連結和英雄區塊的按鈕，其 href 屬性以 '#' 開頭
+        document.querySelectorAll('nav a[href^="#"], .hero .btn[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault(); // 阻止默認的錨點跳轉行為
+
+                // 獲取目標元素的 ID (去除 '#' 號)
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                // 如果目標元素存在，則平滑捲動到該位置
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth' // 使用平滑捲動效果
+                    });
+                }
+            });
+        });
+
+        // --- 捲動時淡入效果 (Scroll-Reveal) ---
+        // 選取所有帶有 'fade-in-section' class 的元素
+        const fadeInSections = document.querySelectorAll('.fade-in-section');
+
+        // 設定 Intersection Observer 的選項
+        const appearOptions = {
+            threshold: 0.3, // 當目標元素 30% 進入視窗時觸發回調
+            rootMargin: "0px 0px -50px 0px" // 根元素邊界，底部提前 50px 觸發
+        };
+
+        // 創建一個 Intersection Observer 實例
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                // 如果元素沒有進入或離開視窗，則不執行任何操作
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    // 如果元素進入視窗，則為其添加 'is-visible' class 來觸發 CSS 動畫
+                    entry.target.classList.add('is-visible');
+                    // 一旦觸發，停止觀察該元素，避免重複觸發
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        // 對每個需要捲動動畫的區塊進行觀察
+        fadeInSections.forEach(section => {
+            appearOnScroll.observe(section);
+        });
+
+        // --- 頁面載入時的額外檢查 ---
+        // 這個部分是為了處理頁面載入時，如果某些動畫區塊已經在視窗內，則直接顯示動畫
+        window.addEventListener('load', () => {
+            fadeInSections.forEach(section => {
+                // 檢查元素是否已經在可視範圍內（頂部距離小於視窗高度減去一些偏移量）
+                if (section.getBoundingClientRect().top < window.innerHeight - 50) {
+                    section.classList.add('is-visible');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
